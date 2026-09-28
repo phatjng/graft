@@ -3,6 +3,11 @@
   "version": "0.0.0",
   "description": "Graft's server runtime: web-standard request handling and SSR",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/phatjng/graft.git",
+    "directory": "packages/server"
+  },
   "files": [
     "dist"
   ],

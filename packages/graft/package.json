@@ -3,6 +3,11 @@
   "version": "0.0.0",
   "description": "React metaframework built on Vite",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/phatjng/graft.git",
+    "directory": "packages/graft"
+  },
   "bin": {
     "graft": "./dist/cli.js"
   },

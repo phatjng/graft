@@ -3,6 +3,11 @@
   "version": "0.0.0",
   "description": "Graft's Vercel adapter: builds an app for Vercel's Build Output API",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/phatjng/graft.git",
+    "directory": "packages/vercel"
+  },
   "files": [
     "dist"
   ],

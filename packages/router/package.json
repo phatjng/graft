@@ -3,6 +3,11 @@
   "version": "0.0.0",
   "description": "Graft's router runtime: route matching, navigation, and <Link>",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/phatjng/graft.git",
+    "directory": "packages/router"
+  },
   "files": [
     "dist"
   ],

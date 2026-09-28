@@ -3,6 +3,11 @@
   "version": "0.0.0",
   "description": "Graft's Node adapter: serves the fetch handler over Node HTTP",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/phatjng/graft.git",
+    "directory": "packages/node"
+  },
   "files": [
     "dist"
   ],

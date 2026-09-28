@@ -1,6 +1,10 @@
 {
   "name": "graft-monorepo",
   "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/phatjng/graft.git"
+  },
   "type": "module",
   "scripts": {
     "build": "pnpm --recursive --filter \"./packages/*\" run build",

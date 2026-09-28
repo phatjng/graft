@@ -3,6 +3,11 @@
   "version": "0.0.0",
   "description": "Graft's Vite plugin: route discovery, dev server, and builds",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/phatjng/graft.git",
+    "directory": "packages/vite"
+  },
   "files": [
     "dist"
   ],
