@@ -1,0 +1,28 @@
+{
+  "name": "@phatjng/graft-vercel",
+  "version": "0.0.0",
+  "description": "Graft's Vercel adapter: builds an app for Vercel's Build Output API",
+  "license": "MIT",
+  "files": [
+    "dist"
+  ],
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsdown",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@phatjng/graft-node": "workspace:*",
+    "@phatjng/graft-vite": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.3"
+  }
+}

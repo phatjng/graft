@@ -1,0 +1,91 @@
+/* Browser defaults, plus just enough for a sidebar next to the content. */
+
+body {
+  font-family: system-ui, sans-serif;
+  line-height: 1.6;
+  margin: 0;
+  display: grid;
+  grid-template-columns: 16rem minmax(0, 48rem);
+  gap: 3rem;
+  justify-content: center;
+}
+
+body > aside {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  box-sizing: border-box;
+  padding: 1rem 0 2rem 1rem;
+}
+
+body > aside ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+body > aside ul ul {
+  padding-left: 1rem;
+}
+
+body > aside nav > ul > li + li {
+  margin-top: 1rem;
+}
+
+body > aside ul ul ul {
+  margin-bottom: 0.5rem;
+}
+
+[aria-current="page"] {
+  font-weight: bold;
+}
+
+body > div {
+  padding: 1rem 1rem 4rem;
+}
+
+nav[aria-label="Previous and next pages"] {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 3rem;
+  padding-top: 1rem;
+  border-top: 1px solid;
+}
+
+pre {
+  overflow-x: auto;
+  padding: 1rem;
+  border: 1px solid;
+}
+
+figure {
+  margin: 1rem 0;
+}
+
+figure pre {
+  margin-top: 0.25rem;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+th,
+td {
+  text-align: left;
+  vertical-align: top;
+  padding: 0.25rem 1rem 0.25rem 0;
+}
+
+@media (max-width: 50rem) {
+  body {
+    display: block;
+  }
+
+  body > aside {
+    position: static;
+    height: auto;
+    padding: 1rem;
+    border-bottom: 1px solid;
+  }
+}

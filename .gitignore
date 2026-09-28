@@ -1,0 +1,10 @@
+*.log
+.DS_Store
+
+.graft
+.vercel
+
+node_modules
+dist
+
+PLAN.md
