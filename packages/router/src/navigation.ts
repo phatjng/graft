@@ -148,8 +148,11 @@ export const useBrowserNavigator: UseNavigator = (_state, setState) => {
   });
 
   useEffect(() => {
-    // Graft restores scroll positions itself: the browser would do it too
-    // early, before the previous page's content is back on screen.
+    // Within this document, Graft restores scroll positions itself: the
+    // browser would do it too early, before the previous page's content is
+    // back on screen. Loading a document (a reload, or Back to another one)
+    // is left to the browser, which restores the position as the server's
+    // HTML arrives, before anything is painted at the top. See onPageHide.
     window.history.scrollRestoration = "manual";
 
     if (typeof window.history.state?.key !== "string") {
@@ -157,10 +160,6 @@ export const useBrowserNavigator: UseNavigator = (_state, setState) => {
     }
 
     current.current = { key: historyKey(), url: window.location.href };
-
-    // After a reload, return to where the page was.
-    const saved = scrollPositions.get(historyKey());
-    if (saved !== undefined) window.scrollTo(0, saved);
 
     const onPopState = (): void => {
       const previous = new URL(current.current.url);
@@ -179,14 +178,26 @@ export const useBrowserNavigator: UseNavigator = (_state, setState) => {
     const onPageHide = (): void => {
       saveScrollPosition(historyKey());
       persistScrollPositions();
+
+      // The document is going away, so hand scroll restoration back to the
+      // browser for when this entry is loaded again. Restoring it after
+      // hydration instead would show the top of the page first.
+      window.history.scrollRestoration = "auto";
+    };
+
+    // The page came back from the back/forward cache, without hydrating again.
+    const onPageShow = (event: PageTransitionEvent): void => {
+      if (event.persisted) window.history.scrollRestoration = "manual";
     };
 
     window.addEventListener("popstate", onPopState);
     window.addEventListener("pagehide", onPageHide);
+    window.addEventListener("pageshow", onPageShow);
 
     return () => {
       window.removeEventListener("popstate", onPopState);
       window.removeEventListener("pagehide", onPageHide);
+      window.removeEventListener("pageshow", onPageShow);
     };
   }, [navigator]);
 

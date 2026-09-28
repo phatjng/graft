@@ -205,6 +205,27 @@ describe("navigation edge cases", () => {
     await page.close();
   });
 
+  it("lets the browser restore the scroll position on a reload, before hydration", async () => {
+    const { page } = await openHydrated(browser, `${dev.origin}/long`);
+    await page.getByRole("link", { name: "about, from the bottom" }).scrollIntoViewIfNeeded();
+    const scrolled = await page.evaluate(() => window.scrollY);
+    expect(scrolled).toBeGreaterThan(1000);
+
+    // Graft restoring the position itself would only happen after hydration,
+    // with the top of the page painted first.
+    await page.addInitScript(() => {
+      (window as { restoration?: string }).restoration = window.history.scrollRestoration;
+    });
+    await page.reload();
+
+    expect(await page.evaluate(() => (window as { restoration?: string }).restoration)).toBe(
+      "auto",
+    );
+    await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(scrolled);
+
+    await page.close();
+  });
+
   it("leaves links to a spot on the same page to the browser", async () => {
     const { page } = await openHydrated(browser, `${dev.origin}/long`);
     const requests = recordRequests(page);
