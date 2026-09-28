@@ -26,7 +26,7 @@ export function NavLink({ href, children }: { href: string; children: React.Reac
 `}</Code>
 
       <h2>Signature</h2>
-      <Code>{`
+      <Code lang="ts">{`
 function usePathname(): string;
 `}</Code>
 

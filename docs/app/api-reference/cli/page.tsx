@@ -49,7 +49,7 @@ export default function Cli() {
       <h2>
         <code>graft start</code>
       </h2>
-      <Code>{`
+      <Code lang="shell">{`
 graft start [dir] [--port <port>] [--host <host>]
 `}</Code>
       <p>
@@ -92,7 +92,7 @@ graft start [dir] [--port <port>] [--host <host>]
       <h2>
         <code>graft typegen</code>
       </h2>
-      <Code>{`
+      <Code lang="shell">{`
 graft typegen [root]
 `}</Code>
       <p>

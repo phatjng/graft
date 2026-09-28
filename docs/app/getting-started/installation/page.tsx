@@ -19,7 +19,7 @@ export default function Installation() {
 
       <h2>Install the packages</h2>
       <p>In a new folder, install Graft, React and Vite:</p>
-      <Code>{`
+      <Code lang="shell">{`
 npm install @phatjng/graft react react-dom
 npm install --save-dev vite typescript @types/react @types/react-dom
 `}</Code>
@@ -109,7 +109,7 @@ export default function Home() {
 `}</Code>
 
       <h2>Run it</h2>
-      <Code>{`
+      <Code lang="shell">{`
 npm run dev
 `}</Code>
       <p>
@@ -117,7 +117,7 @@ npm run dev
         its state.
       </p>
       <p>To try the production build:</p>
-      <Code>{`
+      <Code lang="shell">{`
 npm run build
 npm start
 `}</Code>

@@ -8,7 +8,7 @@ export default function Deploying() {
       <title>Deploying · Graft</title>
       <h1>Deploying</h1>
       <p>A Graft app builds with Vite and runs on Node:</p>
-      <Code>{`
+      <Code lang="shell">{`
 vite build
 graft start
 `}</Code>
@@ -37,7 +37,7 @@ dist/
         <code>dist/client</code> are served first, with a long-lived cache for the hashed files in{" "}
         <code>assets/</code>; every other request goes to your app.
       </p>
-      <Code>{`
+      <Code lang="shell">{`
 graft start                  # serves ./dist on port 3000
 graft start build --port 8080
 PORT=8080 HOST=127.0.0.1 graft start
@@ -115,7 +115,7 @@ export default defineConfig({
         <code>build</code> script). Vercel picks up <code>.vercel/output/</code> once the build has
         written it. To build and deploy from your machine instead, use the Vercel CLI:
       </p>
-      <Code>{`
+      <Code lang="shell">{`
 vercel build
 vercel deploy --prebuilt
 `}</Code>

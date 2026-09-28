@@ -21,7 +21,7 @@ hydrate();
 `}</Code>
 
       <h2>Signature</h2>
-      <Code>{`
+      <Code lang="ts">{`
 function hydrate(): Promise<void>;
 `}</Code>
 

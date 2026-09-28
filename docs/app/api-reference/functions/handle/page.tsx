@@ -24,7 +24,7 @@ export default {
 `}</Code>
 
       <h2>Signature</h2>
-      <Code>{`
+      <Code lang="ts">{`
 function handle(request: Request): Promise<Response>;
 `}</Code>
       <p>

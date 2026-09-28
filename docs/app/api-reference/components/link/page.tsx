@@ -36,7 +36,7 @@ export default function Home() {
         handlers. Your <code>onClick</code> runs first; call <code>event.preventDefault()</code> in
         it to cancel the navigation.
       </p>
-      <Code>{`
+      <Code lang="tsx">{`
 const pathname = usePathname();
 
 <Link href="/settings" className="nav-link" aria-current={pathname === "/settings" ? "page" : undefined}>

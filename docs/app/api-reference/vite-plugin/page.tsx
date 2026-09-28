@@ -91,7 +91,7 @@ export default defineConfig({
         <code>app/blog/page.tsx</code> now answers <code>/docs/blog</code>. Inside the app, keep
         writing paths without the base; Graft adds it for you:
       </p>
-      <Code>{`
+      <Code lang="tsx">{`
 <Link href="/blog">Blog</Link>          // links to /docs/blog
 <Form method="post" action="/login">    // posts to /docs/login
 redirect("/login")                      // redirects to /docs/login

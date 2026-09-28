@@ -29,7 +29,7 @@ console.log("Listening", server.address());
 `}</Code>
 
       <h2>Signature</h2>
-      <Code>{`
+      <Code lang="ts">{`
 function serve(app: FetchHandler, options?: ServeOptions): Promise<Server>;
 
 interface FetchHandler {

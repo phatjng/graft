@@ -1,91 +1,44 @@
-/* Browser defaults, plus just enough for a sidebar next to the content. */
+@import "tailwindcss";
+@import "@fontsource-variable/inter";
+@plugin "@tailwindcss/typography";
 
-body {
-  font-family: system-ui, sans-serif;
-  line-height: 1.6;
-  margin: 0;
-  display: grid;
-  grid-template-columns: 16rem minmax(0, 48rem);
-  gap: 3rem;
-  justify-content: center;
+@theme {
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
 }
 
-body > aside {
-  position: sticky;
-  top: 0;
-  height: 100vh;
-  overflow-y: auto;
-  box-sizing: border-box;
-  padding: 1rem 0 2rem 1rem;
+/* Code colors from Sugar High's One Dark Pro preset: One Light in light mode, One Dark Pro in dark mode. */
+:root {
+  --sh-surface: #fafafa;
+  --sh-border: var(--color-gray-200);
+  --sh-class: #a626a4;
+  --sh-identifier: #383a42;
+  --sh-sign: #383a42;
+  --sh-string: #50a14f;
+  --sh-keyword: #a626a4;
+  --sh-comment: #a0a1a7;
+  --sh-jsxliterals: #c18401;
+  --sh-entity: #4078f2;
+  --sh-property: #0184bc;
 }
 
-body > aside ul {
-  list-style: none;
-  padding-left: 0;
-}
-
-body > aside ul ul {
-  padding-left: 1rem;
-}
-
-body > aside nav > ul > li + li {
-  margin-top: 1rem;
-}
-
-body > aside ul ul ul {
-  margin-bottom: 0.5rem;
-}
-
-[aria-current="page"] {
-  font-weight: bold;
-}
-
-body > div {
-  padding: 1rem 1rem 4rem;
-}
-
-nav[aria-label="Previous and next pages"] {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 3rem;
-  padding-top: 1rem;
-  border-top: 1px solid;
-}
-
-pre {
-  overflow-x: auto;
-  padding: 1rem;
-  border: 1px solid;
-}
-
-figure {
-  margin: 1rem 0;
-}
-
-figure pre {
-  margin-top: 0.25rem;
-}
-
-table {
-  border-collapse: collapse;
-}
-
-th,
-td {
-  text-align: left;
-  vertical-align: top;
-  padding: 0.25rem 1rem 0.25rem 0;
-}
-
-@media (max-width: 50rem) {
-  body {
-    display: block;
+@media (prefers-color-scheme: dark) {
+  :root {
+    --sh-surface: #282c34;
+    --sh-border: transparent;
+    --sh-class: #e06c75;
+    --sh-identifier: #abb2bf;
+    --sh-sign: #abb2bf;
+    --sh-string: #98c379;
+    --sh-keyword: #c678dd;
+    --sh-comment: #5c6370;
+    --sh-jsxliterals: #e5c07b;
+    --sh-entity: #61afef;
+    --sh-property: #56b6c2;
   }
+}
 
-  body > aside {
-    position: static;
-    height: auto;
-    padding: 1rem;
-    border-bottom: 1px solid;
-  }
+.prose pre {
+  background-color: var(--sh-surface);
+  border: 1px solid var(--sh-border);
+  color: var(--sh-identifier);
 }

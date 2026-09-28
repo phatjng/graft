@@ -22,7 +22,7 @@ export async function loader({ request }: LoaderProps<"/dashboard">) {
 `}</Code>
 
       <h2>Signature</h2>
-      <Code>{`
+      <Code lang="ts">{`
 function redirect(url: string, status?: 301 | 302 | 303 | 307 | 308): Response;
 `}</Code>
       <h3>

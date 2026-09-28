@@ -36,7 +36,8 @@ describe("docs: the Graft docs site, built with Graft", () => {
       const html = await response.text();
       expect(html, href).toMatch(/<title>[^<]+ · Graft<\/title>/);
       expect(html, href).toContain("<h1>");
-      expect(html, href).toContain(`aria-current="page">${escapeHtml(title)}</a>`);
+      const current = html.match(/<a [^>]*aria-current="page"[^>]*>([^<]*)<\/a>/);
+      expect(current?.[1], href).toBe(escapeHtml(title));
     }
   });
 

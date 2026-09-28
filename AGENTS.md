@@ -33,7 +33,7 @@ pnpm workspace monorepo:
 - The `graft-*` packages are internal and versioned together. A new runtime or host is a new adapter package, exposed as `@phatjng/graft/<runtime>`.
 - Each `@phatjng/graft` subpath entry (`src/vite.ts`, `src/server.ts`, ...) re-exports an internal package and needs a matching entry in both its `tsdown.config.ts` and its `exports`.
 - Examples consume the packages through `workspace:*`, like a real user. Framework code goes in `packages/*`, never in the examples.
-- Docs pages are plain TSX (no MDX) with browser-default styling. The sidebar and Previous/Next order come from `docs/app/nav.ts`, so a new page needs an entry there.
+- Docs pages are plain TSX (no MDX), styled with Tailwind CSS: page content gets `@tailwindcss/typography` defaults from the `prose` class in `docs/app/layout.tsx`, so write plain HTML elements rather than utility classes. Show code with `<Code>` from `docs/app/components.tsx`, which highlights it with Sugar High: pass `file` (the language comes from its extension) or `lang` (like `"ts"` or `"shell"`). The sidebar and Previous/Next order come from `docs/app/nav.ts`, so a new page needs an entry there.
 
 ## Tech
 
