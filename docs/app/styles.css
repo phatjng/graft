@@ -9,6 +9,7 @@
 /* Code colors from Sugar High's One Dark Pro preset: One Light in light mode, One Dark Pro in dark mode. */
 :root {
   --sh-surface: #fafafa;
+  --sh-header: var(--color-white);
   --sh-border: var(--color-gray-200);
   --sh-class: #a626a4;
   --sh-identifier: #383a42;
@@ -24,7 +25,8 @@
 @media (prefers-color-scheme: dark) {
   :root {
     --sh-surface: #282c34;
-    --sh-border: transparent;
+    --sh-header: #21252b;
+    --sh-border: var(--color-gray-800);
     --sh-class: #e06c75;
     --sh-identifier: #abb2bf;
     --sh-sign: #abb2bf;
@@ -37,8 +39,71 @@
   }
 }
 
-.prose pre {
+/* Headings: each section starts with a rule, and anchors land below the sticky header. */
+.prose :where(h1) {
+  @apply mb-4 text-4xl font-semibold tracking-tight;
+}
+
+.prose :where(h2) {
+  @apply mt-14 scroll-mt-20 border-t border-gray-200 pt-10 font-semibold tracking-tight dark:border-gray-800;
+}
+
+.prose :where(h3) {
+  @apply scroll-mt-20 font-semibold;
+}
+
+/* Inline code as a chip, without the typography plugin's backticks. */
+.prose :where(code):not(:where(pre code, figcaption code))::before,
+.prose :where(code):not(:where(pre code, figcaption code))::after {
+  content: none;
+}
+
+.prose :where(code):not(:where(pre code, figcaption code, a code, h2 code, h3 code)) {
+  @apply rounded-md border border-gray-200 bg-gray-50 px-1.5 py-0.5 text-[0.85em] font-normal dark:border-gray-800 dark:bg-gray-900;
+}
+
+.prose :where(h2, h3) :where(code) {
+  @apply font-semibold;
+}
+
+/* Code blocks: a card with the file name as its title bar. */
+.prose figure.code {
+  @apply my-6 overflow-hidden rounded-lg border;
+  border-color: var(--sh-border);
   background-color: var(--sh-surface);
-  border: 1px solid var(--sh-border);
+}
+
+.prose figure.code figcaption {
+  @apply m-0 border-b px-4 py-2.5 text-[0.8125rem];
+  border-color: var(--sh-border);
+  background-color: var(--sh-header);
+}
+
+.prose figure.code figcaption code {
+  @apply font-normal text-gray-600 dark:text-gray-400;
+}
+
+.prose figure.code figcaption code::before,
+.prose figure.code figcaption code::after {
+  content: none;
+}
+
+.prose figure.code pre {
+  @apply m-0 rounded-none bg-transparent px-4 py-4 text-[0.8125rem] leading-relaxed;
   color: var(--sh-identifier);
+}
+
+.prose figure.code .copy {
+  @apply absolute top-2 right-2 rounded-md border px-2 py-0.5 text-xs text-gray-500 opacity-0 transition-opacity group-hover:opacity-100 focus-visible:opacity-100 dark:text-gray-400;
+  border-color: var(--sh-border);
+  background-color: var(--sh-header);
+}
+
+.prose figure.code:has(figcaption) .copy {
+  @apply top-1.5;
+}
+
+/* Tables: quiet rules, like the rest of the page. */
+.prose :where(thead th) {
+  @apply text-sm font-medium text-gray-500 dark:text-gray-400;
 }

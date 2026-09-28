@@ -83,9 +83,55 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
 }
 `}</Code>
       <p>
-        <code>aria-current="page"</code> tells screen readers which link is current, and gives you a
-        selector to style it: <code>{'[aria-current="page"] { font-weight: bold; }'}</code>. See the{" "}
-        <Link href="/api-reference/hooks/use-pathname">usePathname reference</Link>.
+        Marking the link with <code>aria-current="page"</code> rather than a class name does two
+        jobs at once: screen readers announce it as the current page, and it gives you a selector to
+        style. Links to other pages get <code>undefined</code>, so React leaves the attribute out.
+      </p>
+      <Code file="app/styles.css">{`
+nav a[aria-current="page"] {
+  font-weight: 600;
+}
+`}</Code>
+      <p>
+        With Tailwind CSS, the <code>aria-[current=page]:</code> variant does the same inside{" "}
+        <code>className</code>, so the normal and current styles live in one string:
+      </p>
+      <Code lang="tsx">{`
+<Link
+  href={link.href}
+  aria-current={pathname === link.href ? "page" : undefined}
+  className="text-gray-600 aria-[current=page]:font-semibold aria-[current=page]:text-gray-900"
+>
+  {link.label}
+</Link>
+`}</Code>
+      <p>
+        <code>usePathname()</code> returns the same value on the server, so the attribute is already
+        in the server's HTML: the right link is highlighted on first paint, before hydration. After
+        a client navigation, the layout re-renders with the new path and the attribute moves to the
+        new link.
+      </p>
+
+      <h3>Highlighting a section</h3>
+      <p>
+        To keep <em>Blog</em> highlighted on <code>/blog/hello-world</code> too, match the start of
+        the path. Compare against <code>href + "/"</code>, so <code>/blog</code> doesn't match{" "}
+        <code>/blogroll</code>. The exact page keeps <code>"page"</code>, and its section gets{" "}
+        <code>"true"</code>, which means "current item in a set":
+      </p>
+      <Code lang="tsx">{`
+function current(pathname: string, href: string) {
+  if (pathname === href) return "page";
+  if (href !== "/" && pathname.startsWith(href + "/")) return "true";
+}
+
+<Link href="/blog" aria-current={current(pathname, "/blog")}>Blog</Link>
+`}</Code>
+      <p>
+        Style both with <code>[aria-current]</code>, or tell them apart with{" "}
+        <code>[aria-current="page"]</code> and <code>[aria-current="true"]</code>. See the{" "}
+        <Link href="/api-reference/hooks/use-pathname">usePathname reference</Link> for exactly what
+        the path contains.
       </p>
 
       <h2>Prefetching</h2>

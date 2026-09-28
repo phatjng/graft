@@ -79,6 +79,19 @@ export function isGroup(item: NavLink | NavGroup): item is NavGroup {
   return "items" in item;
 }
 
+/** The titles of the groups that contain a page, outermost first, for its breadcrumbs. */
+export function groupsOf(href: string, items: (NavLink | NavGroup)[] = nav): string[] | undefined {
+  for (const item of items) {
+    if (!isGroup(item)) {
+      if (item.href === href) return [];
+      continue;
+    }
+
+    const inner = groupsOf(href, item.items);
+    if (inner) return [item.title, ...inner];
+  }
+}
+
 /** Every page in sidebar order. */
 export const pages: NavLink[] = nav.flatMap(function flatten(item: NavLink | NavGroup): NavLink[] {
   return isGroup(item) ? item.items.flatMap(flatten) : [item];

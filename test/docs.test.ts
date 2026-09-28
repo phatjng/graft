@@ -60,7 +60,7 @@ describe("docs: the Graft docs site, built with Graft", () => {
     await page.getByRole("heading", { level: 1, name: "Fetching data" }).waitFor();
     expect(await page.title()).toBe("Fetching data · Graft");
     expect(await page.locator('[aria-current="page"]').textContent()).toBe("Fetching data");
-    expect(await page.getByRole("link", { name: "Updating data →" }).count()).toBe(1);
+    expect(await page.getByRole("link", { name: "Next Updating data" }).count()).toBe(1);
     expect(await page.evaluate(() => (window as { marker?: boolean }).marker)).toBe(true);
 
     expect(errors).toEqual([]);
