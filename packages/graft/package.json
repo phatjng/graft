@@ -1,6 +1,6 @@
 {
   "name": "@phatjng/graft",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "React metaframework built on Vite",
   "license": "MIT",
   "repository": {

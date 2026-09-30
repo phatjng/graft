@@ -1,6 +1,6 @@
 import { Link } from "@phatjng/graft";
 
-import { Code, Note } from "../../components";
+import { Code } from "../../components";
 
 export default function Installation() {
   return (
@@ -11,11 +11,6 @@ export default function Installation() {
         Graft needs <strong>Node.js 24</strong> or newer, <strong>React 19</strong> and{" "}
         <strong>Vite 8</strong>.
       </p>
-      <Note>
-        Graft hasn't been published to npm yet, so these steps describe the first release. Until
-        then, try it inside the Graft repository, where <code>examples/basic</code> and these docs
-        are Graft apps.
-      </Note>
 
       <h2>Install the packages</h2>
       <p>In a new folder, install Graft, React and Vite:</p>

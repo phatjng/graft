@@ -1,6 +1,6 @@
 {
   "name": "@phatjng/graft-vite",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Graft's Vite plugin: route discovery, dev server, and builds",
   "license": "MIT",
   "repository": {
