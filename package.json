@@ -11,9 +11,13 @@
     "test": "vitest run",
     "typecheck": "pnpm build && pnpm --recursive run typecheck && tsc --noEmit -p test",
     "format": "oxfmt",
-    "format:check": "oxfmt --check"
+    "format:check": "oxfmt --check",
+    "changeset": "changeset",
+    "release": "scripts/stage-release.sh"
   },
   "devDependencies": {
+    "@changesets/changelog-github": "^1.0.1",
+    "@changesets/cli": "^3.0.3",
     "@phatjng/graft": "workspace:*",
     "@phatjng/graft-router": "workspace:*",
     "@types/node": "^26.6.3",

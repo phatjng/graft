@@ -1,0 +1,40 @@
+name: Release
+
+# On every push to main, either opens/updates the "Version Packages" PR (when
+# there are changesets waiting) or, once that PR is merged, stages the new
+# versions on npm. They go live when a maintainer approves them with 2FA.
+
+on:
+  push:
+    branches: [main]
+
+concurrency: ${{ github.workflow }}-${{ github.ref }}
+
+permissions:
+  contents: write # push tags, create GitHub releases
+  pull-requests: write # open the Version Packages PR
+  id-token: write # npm trusted publishing (OIDC), no token needed
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: pnpm
+          registry-url: https://registry.npmjs.org
+
+      # `npm stage publish` needs npm 11.15 or newer.
+      - run: npm install -g npm@latest
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm exec playwright install --with-deps chromium
+      - run: pnpm test
+
+      - uses: changesets/action@v2
+        with:
+          publish-script: pnpm release
+          commit-message: Version Packages
+          pr-title: Version Packages

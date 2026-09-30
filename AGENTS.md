@@ -60,6 +60,15 @@ pnpm --filter basic dev   # vite dev in examples/basic
 pnpm --filter docs dev    # the docs site in dev
 ```
 
+## Releasing
+
+Releases use [Changesets](https://changesets.dev). The six `packages/*` are a `fixed` group, so they always share one version; `examples/*` and `docs` are private and never published.
+
+- A change users would notice (a fix, a feature, a breaking change) comes with a changeset: run `pnpm changeset`, pick the bump, and write one line for the changelog. Commit the generated `.changeset/*.md` file with the change. Internal refactors, tests and docs-only changes don't need one.
+- Graft is `0.x`: a breaking change is a `minor` bump, everything else is a `patch`.
+- On `main`, `.github/workflows/release.yml` opens a "Version Packages" PR that bumps versions and writes `CHANGELOG.md`. Merging it runs `scripts/stage-release.sh`, which stages the new versions on npm with trusted publishing (OIDC), so there's no npm token in the repo. They go live once a maintainer approves them with 2FA under Staged Packages on npmjs.com; approve the internal packages before `@phatjng/graft`.
+- Never bump versions in `package.json` or run `pnpm publish` by hand.
+
 ## Testing
 
 - Work in small steps that each end with something runnable in `examples/basic`, and cover each user-facing behavior with an integration test.
