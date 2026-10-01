@@ -1,6 +1,6 @@
 {
   "name": "@phatjng/graft-router",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Graft's router runtime: route matching, navigation, and <Link>",
   "license": "MIT",
   "repository": {
