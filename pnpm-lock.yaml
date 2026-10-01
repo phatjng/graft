@@ -267,6 +267,9 @@ importers:
         specifier: ^19.3.0
         version: 19.3.0(react@19.3.0)
     devDependencies:
+      '@types/node':
+        specifier: ^26.6.3
+        version: 26.6.3
       '@types/react':
         specifier: ^19.3.0
         version: 19.3.0
@@ -341,6 +344,9 @@ importers:
       '@phatjng/graft-router':
         specifier: workspace:*
         version: link:../router
+      cookie:
+        specifier: ^2.0.1
+        version: 2.0.1
     devDependencies:
       '@types/react':
         specifier: ^19.3.0
@@ -1280,6 +1286,10 @@ packages:
   chai@6.2.2:
     resolution: {integrity: sha512-NUPRluOfOiTKBKvWPtSD4PhFvWCqOi0BGStNWs57X9js7XGTprSmFoz5F0tWhR4WPjNeR9jXqdC7/UpSJTnlRg==}
     engines: {node: '>=18'}
+
+  cookie@2.0.1:
+    resolution: {integrity: sha512-yuToqVvRrj6pfDXREyQAAv8SkAEk/8GS3jQRTiUMm66TVtBYmqQeoEjL2Lmq8Rpo6271vH76InTChTitEAm65w==}
+    engines: {node: '>=22'}
 
   cssesc@3.0.0:
     resolution: {integrity: sha512-/Tb/JcjK111nNScGob5MNtsntNM1aCNUDipB/TkwZFhyDrrE47SOx/18wF2bbjgc3ZzCSKW1T5nt5EbFoAz/Vg==}
@@ -2462,6 +2472,8 @@ snapshots:
   cac@7.0.0: {}
 
   chai@6.2.2: {}
+
+  cookie@2.0.1: {}
 
   cssesc@3.0.0: {}
 

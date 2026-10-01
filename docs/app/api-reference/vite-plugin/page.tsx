@@ -46,6 +46,28 @@ export default defineConfig({
         finishes by writing the host's format. See{" "}
         <Link href="/getting-started/deploying">Deploying</Link>.
       </p>
+      <h3>
+        <code>poweredByHeader</code>
+      </h3>
+      <p>
+        Responses from Graft include an <code>X-Powered-By: Graft</code> header. Set{" "}
+        <code>poweredByHeader: false</code> to leave it out:
+      </p>
+      <Code file="vite.config.ts">{`
+import { graft } from "@phatjng/graft/vite";
+import { defineConfig } from "vite";
+
+export default defineConfig({
+  plugins: [graft({ poweredByHeader: false })],
+});
+`}</Code>
+      <p>
+        It's on every response from{" "}
+        <Link href="/api-reference/functions/handle">
+          <code>handle()</code>
+        </Link>
+        , in development and production. Static files are served without it.
+      </p>
 
       <h2>What the plugin does</h2>
       <ul>

@@ -64,6 +64,7 @@ describe("production build of examples/basic", () => {
 
       expect(fromProd.status).toBe(fromDev.status);
       expect(fromProd.headers.get("content-type")).toBe(fromDev.headers.get("content-type"));
+      expect(fromProd.headers.get("x-powered-by")).toBe("Graft");
       expect(withoutAssetTags(await fromProd.text())).toBe(withoutAssetTags(await fromDev.text()));
     },
   );

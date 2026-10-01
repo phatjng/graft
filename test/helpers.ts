@@ -4,7 +4,7 @@ import { rmSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { graft } from "@phatjng/graft/vite";
+import { graft, type GraftOptions } from "@phatjng/graft/vite";
 import type { Browser, Page } from "playwright";
 import { createBuilder, createServer, type ViteDevServer } from "vite";
 
@@ -17,11 +17,14 @@ export interface DevServer {
 
 /**
  * Starts a Vite dev server for `root` on a free port. Uses the app's own
- * vite.config.ts when `configFile` is set, otherwise just `graft()`.
+ * vite.config.ts when `configFile` is set, otherwise just `graft(graftOptions)`.
  */
 export async function startDevServer(
   root: string,
-  { configFile = false } = {},
+  {
+    configFile = false,
+    graftOptions = {},
+  }: { configFile?: boolean; graftOptions?: GraftOptions } = {},
 ): Promise<DevServer> {
   // Test files run in parallel, often on the same app. Sharing Vite's
   // dependency cache would let one server's re-optimization break another's
@@ -32,7 +35,7 @@ export async function startDevServer(
     root,
     ...(configFile
       ? { configFile: `${root}/vite.config.ts` }
-      : { configFile: false, plugins: [graft()] }),
+      : { configFile: false, plugins: [graft(graftOptions)] }),
     cacheDir,
     logLevel: "silent",
     server: { port: 0 },

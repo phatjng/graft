@@ -39,6 +39,11 @@ export interface GraftOptions {
    * `@phatjng/graft/vercel`. Without one, `vite build` writes `dist/` for `graft start`.
    */
   adapter?: GraftAdapter;
+  /**
+   * Whether responses from Graft include `X-Powered-By: Graft`. Defaults to
+   * `true`; set it to `false` to leave the header out.
+   */
+  poweredByHeader?: boolean;
 }
 
 /**
@@ -77,7 +82,8 @@ const ROUTES_ID = "virtual:graft/routes";
 const SERVER_ID = "virtual:graft/server";
 const CLIENT_ID = "virtual:graft/client";
 const ASSETS_ID = "virtual:graft/assets";
-const VIRTUAL_IDS = new Set([ROUTES_ID, SERVER_ID, CLIENT_ID, ASSETS_ID]);
+const OPTIONS_ID = "virtual:graft/options";
+const VIRTUAL_IDS = new Set([ROUTES_ID, SERVER_ID, CLIENT_ID, ASSETS_ID, OPTIONS_ID]);
 
 // The "\0" prefix tells other plugins these modules don't exist on disk, so they leave them alone.
 const resolved = (id: string): string => `\0${id}`;
@@ -193,7 +199,10 @@ interface GraftApi {
   typegen(): string;
 }
 
-function graftPlugin({ adapter }: GraftOptions): Plugin & { api: GraftApi } {
+function graftPlugin({
+  adapter,
+  poweredByHeader = true,
+}: GraftOptions): Plugin & { api: GraftApi } {
   let config: ResolvedConfig;
   let appDir = "";
   let logger: Logger;
@@ -554,6 +563,11 @@ function graftPlugin({ adapter }: GraftOptions): Plugin & { api: GraftApi } {
 
     load(id) {
       if (!id.startsWith("\0virtual:graft/")) return;
+
+      // Plugin options don't depend on app/, so they load even when it's invalid.
+      if (id === resolved(OPTIONS_ID)) {
+        return `export const poweredByHeader = ${JSON.stringify(poweredByHeader)};\n`;
+      }
 
       const app = appState();
 

@@ -1,1 +1,1 @@
-export { handle } from "./handle";
+export { handle, type HandleOptions } from "./handle";

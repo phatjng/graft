@@ -1,1 +1,1 @@
-export { handle } from "@phatjng/graft-server";
+export { handle, type HandleOptions } from "@phatjng/graft-server";

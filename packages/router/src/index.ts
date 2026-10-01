@@ -7,6 +7,7 @@ export {
   type RouteFile,
   type Submission,
 } from "./context";
+export { type CookieOptions, type Cookies, type DeleteCookieOptions } from "./cookies";
 export {
   ACTION_PARAM,
   DATA_PARAM,

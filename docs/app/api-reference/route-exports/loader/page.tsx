@@ -32,9 +32,9 @@ export async function loader({ params, request }: LoaderProps<"/blog/[slug]">) {
         <code>request</code>
       </h3>
       <p>
-        The incoming <code>Request</code>, for headers, cookies and the query string. Its URL is the
-        page's real URL, including Vite's <code>base</code> if you set one. Graft's own query
-        parameters (<code>_graft_data</code>, <code>_graft_action</code>) are removed.
+        The incoming <code>Request</code>, for headers and the query string. Its URL is the page's
+        real URL, including Vite's <code>base</code> if you set one. Graft's own query parameters (
+        <code>_graft_data</code>, <code>_graft_action</code>) are removed.
       </p>
       <h3>
         <code>params</code>
@@ -42,6 +42,17 @@ export async function loader({ params, request }: LoaderProps<"/blog/[slug]">) {
       <p>
         The dynamic segments in the file's <strong>own</strong> path. A layout's loader doesn't see
         the params of pages below it.
+      </p>
+      <h3>
+        <code>cookies</code>
+      </h3>
+      <p>
+        The request's{" "}
+        <Link href="/api-reference/cookies">
+          <code>cookies</code>
+        </Link>
+        . A loader can set cookies as well as read them: every loader finishes before the page
+        starts streaming.
       </p>
 
       <h2>Return value</h2>

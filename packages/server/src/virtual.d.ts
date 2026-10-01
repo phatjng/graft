@@ -18,3 +18,8 @@ declare module "virtual:graft/assets" {
   /** The CSS and JS a set of route files needs. Only call it after importing them. */
   export function getRouteAssets(ids: string[]): Promise<RouteAssets>;
 }
+
+declare module "virtual:graft/options" {
+  /** Whether responses include `X-Powered-By: Graft` (the plugin's `poweredByHeader`). */
+  export const poweredByHeader: boolean;
+}

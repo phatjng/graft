@@ -147,8 +147,8 @@ import { Form, redirect } from "@phatjng/graft";
 
 import { signOut } from "../session.server";
 
-export async function action({ request }: ActionProps<"/dashboard">) {
-  await signOut(request);
+export function action({ cookies }: ActionProps<"/dashboard">) {
+  signOut(cookies);
   return redirect("/login");
 }
 

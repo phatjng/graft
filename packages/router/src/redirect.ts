@@ -7,8 +7,8 @@ export type RedirectStatus = 301 | 302 | 303 | 307 | 308;
  * has a Vite `base`, Graft adds it in front of paths: `/app/login`.
  *
  * ```ts
- * export async function loader({ request }: LoaderProps<"/dashboard">) {
- *   if (!(await getUser(request))) throw redirect("/login");
+ * export async function loader({ cookies }: LoaderProps<"/dashboard">) {
+ *   if (!(await getUser(cookies))) throw redirect("/login");
  *   ...
  * }
  * ```

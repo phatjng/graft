@@ -14,8 +14,8 @@ import { redirect } from "@phatjng/graft";
 
 import { getUser } from "../session.server";
 
-export async function loader({ request }: LoaderProps<"/dashboard">) {
-  const user = await getUser(request);
+export async function loader({ cookies }: LoaderProps<"/dashboard">) {
+  const user = await getUser(cookies);
   if (!user) throw redirect("/login");
   return { user };
 }
@@ -47,10 +47,10 @@ function redirect(url: string, status?: 301 | 302 | 303 | 307 | 308): Response;
         helpers, so a shared <code>requireUser()</code> can stop any loader that calls it:
       </p>
       <Code file="app/session.server.ts">{`
-import { redirect } from "@phatjng/graft";
+import { redirect, type Cookies } from "@phatjng/graft";
 
-export async function requireUser(request: Request) {
-  const user = await getUser(request);
+export async function requireUser(cookies: Cookies) {
+  const user = await getUser(cookies);
   if (!user) throw redirect("/login");
   return user;
 }

@@ -17,12 +17,24 @@ import {
 import { createElement } from "react";
 import { renderToReadableStream } from "react-dom/server";
 import { clientEntry, dev, getRouteAssets } from "virtual:graft/assets";
+import { poweredByHeader } from "virtual:graft/options";
 import { modules, routes } from "virtual:graft/routes";
 
+import { CookieJar } from "./cookies";
 import { badRequest, forbidden, methodNotAllowed, notFound, serverError } from "./pages";
 
 const HTML_HEADERS = { "content-type": "text/html; charset=utf-8" };
 const DATA_HEADERS = { "content-type": "application/json; charset=utf-8" };
+
+export interface HandleOptions {
+  /**
+   * Secrets for cookies set with `encrypted: true`. The first one encrypts
+   * new cookies, and every one is tried when reading, so adding a new secret
+   * in front rotates keys without logging anyone out. At least 32 characters
+   * each; read them from the environment, never commit them.
+   */
+  cookieSecrets?: string[];
+}
 
 /**
  * Handles a request for the app.
@@ -34,11 +46,26 @@ const DATA_HEADERS = { "content-type": "application/json; charset=utf-8" };
  * - A data request (the page's URL plus `?_graft_data=1`, sent by client
  *   navigation and `<Form>`) gets the data instead of HTML.
  *
+ * Cookies that loaders and actions set go on the response, whatever kind it
+ * is, unless something fails: an error page never sets cookies.
+ *
  * All the work for the request happens inside this call, including rendering
  * that continues after the `Response` is returned, so an `AsyncLocalStorage`
  * context set around it stays readable throughout.
  */
-export async function handle(request: Request): Promise<Response> {
+export async function handle(request: Request, options: HandleOptions = {}): Promise<Response> {
+  const response = await respond(request, options);
+  if (!poweredByHeader) return response;
+
+  // Copied: a Response's headers can be read-only (e.g. from Response.redirect()).
+  const headers = new Headers(response.headers);
+  headers.set("x-powered-by", "Graft");
+
+  const { status, statusText } = response;
+  return new Response(response.body, { status, statusText, headers });
+}
+
+async function respond(request: Request, options: HandleOptions): Promise<Response> {
   const url = new URL(request.url);
   const isDataRequest = url.searchParams.has(DATA_PARAM);
   const actionTarget = url.searchParams.get(ACTION_PARAM);
@@ -60,13 +87,19 @@ export async function handle(request: Request): Promise<Response> {
   // makes the router fall back to a full page load, which shows it.
   if (!match) return isDataRequest ? new Response(null, { status: 404 }) : notFound();
 
+  // One jar for the whole request, so loaders that run after an action see
+  // the cookies it set.
+  const cookies = new CookieJar(request, options.cookieSecrets);
+
   try {
     const loaded = await loadRoutes(match, modules);
 
     if (!isMutation) {
-      return isDataRequest
-        ? await loaderData(request, match, loaded)
-        : await renderPage(request, match, loaded, {});
+      const response = isDataRequest
+        ? await loaderData(request, match, loaded, cookies)
+        : await renderPage(request, match, loaded, cookies, {});
+
+      return await withCookies(response, cookies);
     }
 
     const target = targetFor(match, actionTarget);
@@ -76,18 +109,24 @@ export async function handle(request: Request): Promise<Response> {
     // No walking up to a parent's action: the file the form targeted has to handle it.
     if (!action) return methodNotAllowed();
 
-    const result = await runAction(() => action({ request, params: target.params }), target.id);
-    if (result instanceof Response) return isDataRequest ? redirectAsData(result) : result;
+    const { params } = target;
+    const result = await runAction(() => action({ request, params, cookies }), target.id);
+
+    if (result instanceof Response) {
+      return await withCookies(isDataRequest ? redirectAsData(result) : result, cookies);
+    }
 
     // With JavaScript, the router asks for fresh loader data separately, for
     // whichever page it's on.
-    if (isDataRequest) return dataResponse({ actionData: result });
+    if (isDataRequest) return await withCookies(dataResponse({ actionData: result }), cookies);
 
     // Without JavaScript, the browser shows whatever comes back, so render the
     // page with fresh loader data. Loaders get a GET request: the action
     // already read the body.
     const get = new Request(url, { headers: request.headers, signal: request.signal });
-    return await renderPage(get, match, loaded, { [target.id]: result });
+    const response = await renderPage(get, match, loaded, cookies, { [target.id]: result });
+
+    return await withCookies(response, cookies);
   } catch (error) {
     // In dev, let the error reach Vite, which shows it in the browser with
     // its stack. In production, log it and show a plain page instead.
@@ -155,6 +194,7 @@ async function renderPage(
   request: Request,
   match: RouteMatch,
   loaded: LoadedRoutes,
+  cookies: CookieJar,
   actionData: Record<string, unknown>,
 ): Promise<Response> {
   if (match.layouts[0]?.id !== "layout") {
@@ -163,7 +203,7 @@ async function renderPage(
     );
   }
 
-  const loaderData = await runLoaders(request, match, loaded);
+  const loaderData = await runLoaders(request, match, loaded, cookies);
   if (loaderData instanceof Response) return loaderData;
 
   // HEAD gets the same status and headers as GET, without rendering.
@@ -216,8 +256,9 @@ async function loaderData(
   request: Request,
   match: RouteMatch,
   loaded: LoadedRoutes,
+  cookies: CookieJar,
 ): Promise<Response> {
-  const result = await runLoaders(request, match, loaded);
+  const result = await runLoaders(request, match, loaded, cookies);
   if (result instanceof Response) return redirectAsData(result);
 
   return dataResponse({ loaderData: result });
@@ -280,10 +321,11 @@ async function runLoaders(
   request: Request,
   match: RouteMatch,
   loaded: LoadedRoutes,
+  cookies: CookieJar,
 ): Promise<Record<string, unknown> | Response> {
   const entries = [...match.layouts, match.page];
   const results = await Promise.allSettled(
-    entries.map(async ({ id, params }) => loaded[id]!.loader?.({ request, params })),
+    entries.map(async ({ id, params }) => loaded[id]!.loader?.({ request, params, cookies })),
   );
 
   const data: Record<string, unknown> = {};
@@ -305,6 +347,24 @@ async function runLoaders(
   }
 
   return data;
+}
+
+/**
+ * Adds a `Set-Cookie` header for each cookie set during the request. A
+ * response that sets cookies is for one browser only, so unless it already
+ * says otherwise, it must not be stored by a CDN or other shared cache.
+ */
+async function withCookies(response: Response, cookies: CookieJar): Promise<Response> {
+  const setCookies = await cookies.setCookieHeaders();
+  if (setCookies.length === 0) return response;
+
+  // Copied: a Response's headers can be read-only (e.g. from Response.redirect()).
+  const headers = new Headers(response.headers);
+  for (const setCookie of setCookies) headers.append("set-cookie", setCookie);
+  if (!headers.has("cache-control")) headers.set("cache-control", "private, no-store");
+
+  const { status, statusText } = response;
+  return new Response(response.body, { status, statusText, headers });
 }
 
 /**

@@ -24,7 +24,8 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@phatjng/graft-router": "workspace:*"
+    "@phatjng/graft-router": "workspace:*",
+    "cookie": "^2.0.1"
   },
   "devDependencies": {
     "@types/react": "^19.3.0",

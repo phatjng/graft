@@ -40,7 +40,8 @@ export default function RouteTypes() {
               <code>LoaderProps&lt;Route&gt;</code>
             </td>
             <td>
-              A loader's argument: <code>request</code> and <code>params</code>
+              A loader's argument: <code>request</code>, <code>params</code> and{" "}
+              <code>cookies</code>
             </td>
           </tr>
           <tr>
@@ -48,7 +49,8 @@ export default function RouteTypes() {
               <code>ActionProps&lt;Route&gt;</code>
             </td>
             <td>
-              An action's argument: <code>request</code> and <code>params</code>
+              An action's argument: <code>request</code>, <code>params</code> and{" "}
+              <code>cookies</code>
             </td>
           </tr>
         </tbody>

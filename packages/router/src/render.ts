@@ -10,6 +10,7 @@ import {
 import { preinit, preloadModule } from "react-dom";
 
 import { NavigatorContext, PathnameContext, RouteFileContext, type Navigator } from "./context";
+import type { Cookies } from "./cookies";
 import type { PageData } from "./data";
 import type { RouteMatch, RouteMatchEntry } from "./route-tree";
 
@@ -31,6 +32,7 @@ export interface LoaderProps {
   request: Request;
   /** The params from this file's own path. */
   params: Record<string, string>;
+  cookies: Cookies;
 }
 
 /** Files the browser should start fetching as soon as the HTML arrives. */

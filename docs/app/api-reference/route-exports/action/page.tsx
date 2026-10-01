@@ -18,8 +18,8 @@ import { redirect } from "@phatjng/graft";
 import { requireUser } from "../../../session.server";
 import { updatePost } from "../../../posts.server";
 
-export async function action({ request, params }: ActionProps<"/posts/[id]/edit">) {
-  const user = await requireUser(request);
+export async function action({ request, params, cookies }: ActionProps<"/posts/[id]/edit">) {
+  const user = await requireUser(cookies);
   const form = await request.formData();
 
   const title = String(form.get("title") ?? "").trim();
@@ -46,6 +46,16 @@ export async function action({ request, params }: ActionProps<"/posts/[id]/edit"
         <code>params</code>
       </h3>
       <p>The dynamic segments in the file's own path.</p>
+      <h3>
+        <code>cookies</code>
+      </h3>
+      <p>
+        The request's{" "}
+        <Link href="/api-reference/cookies">
+          <code>cookies</code>
+        </Link>
+        , to read and set. The loaders that run after the action see the cookies it set.
+      </p>
 
       <h2>Return value</h2>
       <p>

@@ -48,7 +48,11 @@ export default function Blog({ loaderData }: PageProps<"/blog">) {
       <h2>Params and the request</h2>
       <p>
         A loader receives the URL's <code>params</code> and the incoming <code>Request</code>, for
-        reading headers, cookies or the query string:
+        reading headers or the query string. It also receives the request's{" "}
+        <Link href="/getting-started/cookies">
+          <code>cookies</code>
+        </Link>
+        :
       </p>
       <Code file="app/blog/[slug]/page.tsx">{`
 import { getPost } from "../../posts.server";
@@ -73,8 +77,8 @@ export default function Post({ loaderData }: PageProps<"/blog/[slug]">) {
       <Code file="app/layout.tsx">{`
 import { getUser } from "./session.server";
 
-export async function loader({ request }: LoaderProps<"/">) {
-  return { user: await getUser(request) };
+export async function loader({ cookies }: LoaderProps<"/">) {
+  return { user: await getUser(cookies) };
 }
 
 export default function RootLayout({ children, loaderData }: LayoutProps<"/">) {
@@ -103,8 +107,8 @@ import { redirect } from "@phatjng/graft";
 
 import { getUser } from "../session.server";
 
-export async function loader({ request }: LoaderProps<"/dashboard">) {
-  const user = await getUser(request);
+export async function loader({ cookies }: LoaderProps<"/dashboard">) {
+  const user = await getUser(cookies);
   if (!user) throw redirect("/login");
   return { user };
 }
