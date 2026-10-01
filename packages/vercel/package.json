@@ -1,6 +1,6 @@
 {
   "name": "@phatjng/graft-vercel",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Graft's Vercel adapter: builds an app for Vercel's Build Output API",
   "license": "MIT",
   "repository": {
